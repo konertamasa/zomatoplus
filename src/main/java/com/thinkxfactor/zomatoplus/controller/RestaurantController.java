@@ -4,7 +4,7 @@ package com.thinkxfactor.zomatoplus.controller;
 import java.util.ArrayList;
 import java.util.List;
 
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,15 +12,49 @@ import org.springframework.web.bind.annotation.RequestBody;
 //import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.thinkxfactor.zomatoplus.models.Restaurant;
+import com.thinkxfactor.zomatoplus.models.User;
+import com.thinkxfactor.zomatoplus.repository.ItemRepository;
+import com.thinkxfactor.zomatoplus.repository.RestaurantRepository;
 import com.thinkxfactor.zomatoplus.models.AddItem;
+
+
+
+
+
 
 
 
 @RestController
 @RequestMapping("/restaurant")
 public class RestaurantController {
+	@Autowired
+	private RestaurantRepository restaurantRepository;
+	@Autowired
+	private ItemRepository ItemsRepository;
+	
+	@PostMapping("/add")
+	public Restaurant addRestaurant(@RequestBody Restaurant rst) {
+		Restaurant persistedrestaurant=restaurantRepository.save(rst);
+		return persistedrestaurant;
+	}
+	@PostMapping("/additems")
+	public AddItem addItems(@RequestBody AddItem its) {
+		AddItem persisteditems=ItemsRepository.save(its);
+		return persisteditems;
+	}
+	
 
-	@PostMapping("/create")
+	@GetMapping("/getAll")
+	public List<Restaurant> getAll(){
+		List<Restaurant>listofrestaurants=restaurantRepository.findAll();
+		return listofrestaurants;}
+		
+		@GetMapping("/getItems")
+		public List<AddItem> getAllItems(){
+			List<AddItem>listofitems=ItemsRepository.findAll();
+			return listofitems;}
+
+/*	@PostMapping("/create")
 	public Restaurant restcreate(@RequestBody Restaurant r1) {
 		Restaurant rr=new Restaurant("ABC","22 BK Street","abc@gmail.com","9876543201");
 		System.out.println(rr.toString());
@@ -49,6 +83,6 @@ public class RestaurantController {
 		System.out.println(ai2.toString());
 		return at;
 		
-	}
+	}*/
 
 }
